@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine? 💘</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #fff9fc, #ffe6ee, #ffcce0, #ffd6e7);
+      text-align: center;
+      padding: 20px;
+      color: #d45a85;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+      color: #d45a85;
+      z-index: 10;
+      position: relative;
+    }
+
+    p {
+      font-size: 1.3rem;
+      max-width: 90%;
+      margin-bottom: 30px;
+      color: #d45a85;
+      z-index: 10;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    #yesBtn {
+      background: linear-gradient(135deg, #ff9dc5, #ff6b9d);
+      color: white;
+      font-weight: bold;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 107, 157, 0.6);
+    }
+
+    #noBtn {
+      background-color: #fff0f5;
+      color: #d45a85;
+      border: 2px solid #ffd6e7;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    #noBtn:hover {
+      transform: rotate(8deg) scale(1.1);
+    }
+
+    /* Falling Hearts */
+    .hearts-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .falling-heart {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0;
+      animation: fall linear forwards;
+      user-select: none;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.8; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Sparkles */
+    .sparkles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ffd6e7;
+      border-radius: 50%;
+      box-shadow: 0 0 8px 2px rgba(255, 182, 203, 0.7);
+      animation: twinkle infinite alternate;
+      opacity: 0.6;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 0.8; transform: scale(1.2); }
+    }
+
+    /* Popups */
+    .confirm, .step2, .step3 {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.97);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 8px 30px rgba(255, 157, 197, 0.2);
+      z-index: 20;
+      text-align: center;
+      max-width: 90%;
+      border: 3px solid #ffd6e7;
+    }
+
+    .confirm p, .step2 p, .step3 p {
+      font-size: 1.4rem;
+      margin: 15px 0;
+      color: #d45a85;
+    }
+
+    .confirm button, .step2 button, .step3 button {
+      margin: 10px;
+      min-width: 180px;
+    }
+
+    /* 💖 GRAND FINALE MESSAGE BOX — Centered Card */
+    .finale-card {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.97);
+      padding: 50px 40px;
+      border-radius: 30px;
+      box-shadow: 0 10px 50px rgba(255, 157, 197, 0.3);
+      z-index: 30;
+      text-align: center;
+      max-width: 90%;
+      border: 4px solid #ffd6e7;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .finale-card h2 {
+      font-size: 2.8rem;
+      color: #d45a85;
+      margin: 0 0 25px;
+      text-shadow: 0 0 8px rgba(255, 157, 197, 0.3);
+      line-height: 1.3;
+    }
+
+    .finale-card p {
+      font-size: 1.6rem;
+      color: #d45a85;
+      line-height: 1.7;
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    .finale-card .signature {
+      font-style: italic;
+      font-size: 1.4rem;
+      margin-top: 30px;
+      color: #d45a85;
+    }
+
+    /* 🖼️ BACKGROUND STICKER — Large, faded, behind everything */
+    .background-sticker {
+      position: fixed;
+      bottom: -50px;
+      right: -50px;
+      width: 45vw; /* Large but responsive */
+      max-width: 500px;
+      opacity: 0.08; /* Very subtle — like a watermark */
+      z-index: 0;
+      pointer-events: none;
+      transform: rotate(15deg);
+    }
+
+    /* Optional: Add floating animation to background sticker */
+    .background-sticker {
+      animation: floatSubtle 8s ease-in-out infinite;
+    }
+
+    @keyframes floatSubtle {
+      0%, 100% { transform: rotate(15deg) translate(0, 0); }
+      50% { transform: rotate(15deg) translate(10px, -10px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🖼️ BACKGROUND STICKER — Behind everything -->
+  <img src="us.png" alt="Us Watermark" class="background-sticker" />
+
+  <!-- Sparkles -->
+  <div class="sparkles" id="sparkles"></div>
+
+  <!-- Falling hearts -->
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <h1>💌 Will you be my Valentine? 💘</h1>
+  <p>My forever love... Tap your answer below ❤️</p>
+
+  <div class="buttons">
+    <button id="yesBtn">YES! Always & Forever 💞</button>
+    <button id="noBtn">No 😅</button>
+  </div>
+
+  <!-- Step 1 Confirm -->
+  <div class="confirm" id="step1">
+    <p>⏳ Wait... you still have time to escape 😏</p>
+    <p>I’ll even give you 3 seconds to run...</p>
+    <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+      <button id="step1Yes" style="background:linear-gradient(135deg, #ff9dc5, #ff6b9d); color:white;">Yes, I surrender 💍</button>
+      <button id="step1No" style="background:#fff0f5; color:#d45a85; border:2px solid #ffd6e7;">Let me think… 😅</button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="confirm" id="step2">
+    <p>⚠️ LAST CHANCE!</p>
+    <p>Are you 1000% sure? This is legally binding in the Court of Love 💘</p>
+    <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+      <button id="step2Yes" style="background:linear-gradient(135deg, #ff9dc5, #ff6b9d); color:white;">I SWEAR! 💞</button>
+      <button id="step2No" style="background:#fff0f5; color:#d45a85; border:2px solid #ffd6e7;">Umm… one more sec?</button>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="confirm" id="step3">
+    <p>🔐 FINAL WARNING</p>
+    <p>Saying “yes” means FOREVER. No refunds. No returns. Just cuddles.</p>
+    <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+      <button id="step3Yes" style="background:linear-gradient(135deg, #ff9dc5, #ff6b9d); color:white;">LOCK IT IN! 💋</button>
+      <button id="step3No" style="background:#fff0f5; color:#d45a85; border:2px solid #ffd6e7;">Can I get a lawyer? 😂</button>
+    </div>
+  </div>
+
+  <!-- 💖 GRAND FINALE — Beautiful Centered Card -->
+  <div class="finale-card" id="finaleCard">
+    <h2>🌹 My Love, You Said YES... 🌹</h2>
+    <p>And with that one word, you just made my whole world glow.</p>
+    <p>Through every season, every storm, every quiet morning and wild adventure — I choose you. Again and again.</p>
+    <p>You’re not just my Valentine… you’re my favorite hello, my hardest goodbye, and my greatest “I do” — every single day.</p>
+    <p class="signature">Forever yours, now and always 💋</p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const step3 = document.getElementById("step3");
+    const finaleCard = document.getElementById("finaleCard");
+    const heartsContainer = document.getElementById("heartsContainer");
+    const sparklesContainer = document.getElementById("sparkles");
+
+    // Create sparkles
+    for (let i = 0; i < 80; i++) {
+      createSparkle();
+    }
+
+    function createSparkle() {
+      const sparkle = document.createElement("div");
+      sparkle.classList.add("sparkle");
+      sparkle.style.left = Math.random() * 100 + "%";
+      sparkle.style.top = Math.random() * 100 + "%";
+      sparkle.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      sparkle.style.animationDelay = (Math.random() * 5) + "s";
+      sparklesContainer.appendChild(sparkle);
+    }
+
+    // “No” button runs away
+    let escapeLevel = 1;
+
+    noBtn.addEventListener("mouseover", function() {
+      const rect = noBtn.getBoundingClientRect();
+      const maxX = window.innerWidth - rect.width - 20;
+      const maxY = window.innerHeight - rect.height - 20;
+
+      let newX = Math.random() * maxX;
+      let newY = Math.random() * maxY;
+
+      if (Math.abs(newX - rect.left) < 100) newX = (newX + 200) % maxX;
+      if (Math.abs(newY - rect.top) < 100) newY = (newY + 200) % maxY;
+
+      noBtn.style.position = "fixed";
+      noBtn.style.transition = `all ${0.7 / escapeLevel}s cubic-bezier(0.68, -0.55, 0.27, 1.55)`;
+      noBtn.style.transform = "scale(1.3) rotate(15deg)";
+
+      setTimeout(() => {
+        noBtn.style.top = newY + "px";
+        noBtn.style.left = newX + "px";
+        noBtn.style.transform = "rotate(" + (Math.random()*20 - 10) + "deg) scale(1)";
+        escapeLevel += 0.1;
+        noBtn.innerText = "Catch me if you can 😉";
+        setTimeout(() => { noBtn.innerText = "No 😅"; }, 800);
+      }, 50);
+    });
+
+    // Navigation
+    yesBtn.addEventListener("click", () => {
+      document.querySelector('.buttons').style.display = "none";
+      step1.style.display = "block";
+    });
+
+    document.getElementById("step1Yes").addEventListener("click", () => {
+      step1.style.display = "none";
+      step2.style.display = "block";
+    });
+    document.getElementById("step1No").addEventListener("click", () => {
+      step1.style.display = "none";
+      document.querySelector('.buttons').style.display = "flex";
+    });
+
+    document.getElementById("step2Yes").addEventListener("click", () => {
+      step2.style.display = "none";
+      step3.style.display = "block";
+    });
+    document.getElementById("step2No").addEventListener("click", () => {
+      step2.style.display = "none";
+      step1.style.display = "block";
+    });
+
+    document.getElementById("step3Yes").addEventListener("click", () => {
+      step3.style.display = "none";
+
+      // Show finale card
+      finaleCard.style.display = "block";
+
+      // Start heart storm!
+      const totalHearts = 2500;
+      const durationMs = 10000;
+
+      for (let i = 0; i < totalHearts; i++) {
+        setTimeout(() => {
+          createFallingHeart();
+        }, (i / totalHearts) * durationMs);
+      }
+    });
+
+    document.getElementById("step3No").addEventListener("click", () => {
+      step3.style.display = "none";
+      step2.style.display = "block";
+    });
+
+    function createFallingHeart() {
+      const heartTypes = ["💖", "💗", "💓", "💕", "💞", "💘", "💝"];
+      const heart = document.createElement("div");
+      heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+      heart.classList.add("falling-heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
+      heart.style.opacity = Math.random() * 0.6 + 0.4;
+      heart.style.fontSize = (Math.random() * 0.8 + 0.8) + "rem";
+      heartsContainer.appendChild(heart);
+
+      setTimeout(() => {
+        if (heart && heart.parentNode) {
+          heart.remove();
+        }
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
